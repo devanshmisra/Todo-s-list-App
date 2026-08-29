@@ -1,16 +1,41 @@
-# React + Vite
+# To-Do List Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A modern, minimalist, and responsive To-Do List application built with React and Vite.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Task Management:** Add new tasks, mark them as complete (strike-through), or permanently delete them.
+- **Data Persistence:** Tasks are automatically saved to your browser's local storage, ensuring your data remains intact across page reloads.
+- **Responsive Design:** Clean and minimalist UI that looks great on both desktop and mobile devices.
+- **Validation & Polish:** Prevents adding empty tasks and features smooth hover effects for a professional feel.
 
-## React Compiler
+## Technologies Used
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React**: UI component library.
+- **Vite**: Blazing fast frontend build tool.
+- **Vanilla CSS**: Custom styling with CSS variables and modern flexbox layouts.
+- **Lucide React**: Beautiful, consistent vector icons.
 
-## Expanding the Oxlint configuration
+## How to Run Locally
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/devanshmisra/Todo-s-list-App.git
+   cd Todo-s-list-App
+   ```
+
+2. **Install dependencies:**
+   Make sure you have Node.js installed on your machine, then run:
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+   Open your browser and navigate to the localhost URL provided in your terminal (typically `http://localhost:5173/`).
+
+## Live Deployment
+
+[Link to Live Site] *(Add your Vercel deployment link here once hosted!)*
