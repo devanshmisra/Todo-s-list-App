@@ -61,7 +61,8 @@ function App() {
   };
 
   return (
-    <div className="app-container">
+    <>
+      <div className="app-container">
       <div className="header">
         <h1>To-Do List</h1>
         <button 
@@ -115,6 +116,10 @@ function App() {
         )}
       </div>
     </div>
+      <footer className="footer">
+        Built by Devansh Mishra
+      </footer>
+    </>
   );
 }
 
