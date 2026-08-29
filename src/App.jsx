@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Check, Trash2, ListTodo } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import './index.css';
 
 function App() {
@@ -8,11 +8,7 @@ function App() {
     if (saved) {
       return JSON.parse(saved);
     }
-    return [
-      { id: 1, text: 'Master modern React design', completed: true },
-      { id: 2, text: 'Build a beautiful to-do app', completed: false },
-      { id: 3, text: 'Add smooth animations', completed: false }
-    ];
+    return [];
   });
   
   const [inputValue, setInputValue] = useState('');
@@ -31,7 +27,7 @@ function App() {
       completed: false
     };
     
-    setTodos([newTodo, ...todos]);
+    setTodos([...todos, newTodo]);
     setInputValue('');
   };
 
@@ -46,51 +42,47 @@ function App() {
   };
 
   return (
-    <div className="glass-container">
-      <header>
-        <h1 className="title">TaskFlow</h1>
-        <p className="subtitle">Your tasks, beautifully organized.</p>
-      </header>
+    <div className="app-container">
+      <div className="header">
+        <h1>To-Do List</h1>
+      </div>
 
-      <form onSubmit={handleSubmit} className="input-wrapper">
+      <form onSubmit={handleSubmit} className="input-section">
         <input
           type="text"
           className="todo-input"
-          placeholder="What needs to be done?"
+          placeholder="Add a new task..."
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-        <button type="submit" className="add-btn" aria-label="Add task">
-          <Plus size={24} strokeWidth={2.5} />
+        <button type="submit" className="add-button">
+          Add
         </button>
       </form>
 
       <div className="todo-list">
         {todos.length === 0 ? (
           <div className="empty-state">
-            <ListTodo className="empty-state-icon" />
-            <p>You're all caught up!<br/>Enjoy your free time.</p>
+            No tasks yet. Add one above!
           </div>
         ) : (
           todos.map(todo => (
             <div key={todo.id} className={`todo-item ${todo.completed ? 'completed' : ''}`}>
-              <div 
-                className="checkbox-wrapper" 
-                onClick={() => toggleComplete(todo.id)}
-              >
-                <div className="checkbox-custom">
-                  <Check className="checkbox-icon" strokeWidth={3} />
-                </div>
-              </div>
-              
-              <span className="todo-text">{todo.text}</span>
-              
+              <label className="todo-content">
+                <input 
+                  type="checkbox" 
+                  className="todo-checkbox"
+                  checked={todo.completed}
+                  onChange={() => toggleComplete(todo.id)}
+                />
+                <span className="todo-text">{todo.text}</span>
+              </label>
               <button 
-                className="delete-btn"
+                className="delete-button"
                 onClick={() => deleteTodo(todo.id)}
                 aria-label="Delete task"
               >
-                <Trash2 size={18} />
+                <Trash2 size={16} strokeWidth={2} />
               </button>
             </div>
           ))
