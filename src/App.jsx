@@ -1,30 +1,30 @@
 import { useState, useEffect } from 'react';
-import { Trash2, Moon, Sun } from 'lucide-react';
+import { Toaster } from 'react-hot-toast';
+import { useTodos } from './hooks/useTodos';
+import { Header } from './components/Header';
+import { TodoInput } from './components/TodoInput';
+import { TodoList } from './components/TodoList';
 import './index.css';
 
 function App() {
-  const [todos, setTodos] = useState(() => {
-    const saved = localStorage.getItem('todos');
-    if (saved) {
-      return JSON.parse(saved);
-    }
-    return [];
-  });
-  
-  const [inputValue, setInputValue] = useState('');
+  const {
+    todos,
+    filteredTodos,
+    filter,
+    setFilter,
+    addTodo,
+    toggleComplete,
+    deleteTodo,
+    editTodo,
+    clearCompleted,
+    reorderTodos
+  } = useTodos();
 
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      return savedTheme === 'dark';
-    }
-    // Default to user's system preference
+    if (savedTheme) return savedTheme === 'dark';
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
-
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -36,86 +36,66 @@ function App() {
     }
   }, [isDarkMode]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!inputValue.trim()) return;
-    
-    const newTodo = {
-      id: Date.now(),
-      text: inputValue.trim(),
-      completed: false
-    };
-    
-    setTodos([...todos, newTodo]);
-    setInputValue('');
-  };
-
-  const toggleComplete = (id) => {
-    setTodos(todos.map(todo => 
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ));
-  };
-
-  const deleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  };
-
   return (
     <>
+      <Toaster position="bottom-right" toastOptions={{
+        style: {
+          background: isDarkMode ? '#333' : '#fff',
+          color: isDarkMode ? '#fff' : '#333',
+        }
+      }} />
       <div className="app-container">
-      <div className="header">
-        <h1>To-Do List</h1>
-        <button 
-          className="theme-toggle" 
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          aria-label="Toggle theme"
-        >
-          {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
-      </div>
+        <Header isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+        
+        <TodoInput onAdd={addTodo} />
 
-      <form onSubmit={handleSubmit} className="input-section">
-        <input
-          type="text"
-          className="todo-input"
-          placeholder="Add a new task..."
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-        <button type="submit" className="add-button">
-          Add
-        </button>
-      </form>
+        <div className="filter-container">
+          <button 
+            className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
+            onClick={() => setFilter('all')}
+          >
+            All
+          </button>
+          <button 
+            className={`filter-btn ${filter === 'active' ? 'active' : ''}`}
+            onClick={() => setFilter('active')}
+          >
+            Active
+          </button>
+          <button 
+            className={`filter-btn ${filter === 'completed' ? 'active' : ''}`}
+            onClick={() => setFilter('completed')}
+          >
+            Completed
+          </button>
+        </div>
 
-      <div className="todo-list">
         {todos.length === 0 ? (
           <div className="empty-state">
             No tasks yet. Add one above!
           </div>
+        ) : filteredTodos.length === 0 ? (
+          <div className="empty-state">
+            No {filter} tasks found.
+          </div>
         ) : (
-          todos.map(todo => (
-            <div key={todo.id} className={`todo-item ${todo.completed ? 'completed' : ''}`}>
-              <label className="todo-content">
-                <input 
-                  type="checkbox" 
-                  className="todo-checkbox"
-                  checked={todo.completed}
-                  onChange={() => toggleComplete(todo.id)}
-                />
-                <span className="todo-text">{todo.text}</span>
-              </label>
-              <button 
-                className="delete-button"
-                onClick={() => deleteTodo(todo.id)}
-                aria-label="Delete task"
-              >
-                <Trash2 size={16} strokeWidth={2} />
-              </button>
-            </div>
-          ))
+          <TodoList 
+            todos={filteredTodos} 
+            onToggle={toggleComplete} 
+            onDelete={deleteTodo} 
+            onEdit={editTodo}
+            onReorder={reorderTodos}
+          />
+        )}
+        
+        {todos.some(todo => todo.completed) && (
+          <div className="clear-container">
+            <button className="clear-btn" onClick={clearCompleted}>
+              Clear Completed
+            </button>
+          </div>
         )}
       </div>
-    </div>
       <footer className="footer">
         Built by Devansh Mishra
       </footer>
